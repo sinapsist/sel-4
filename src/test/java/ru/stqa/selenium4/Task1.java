@@ -10,7 +10,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
 
-public class MyFirstTest {
+/**
+ * Created by Tester on 2/26/2017.
+ */
+public class Task1 {
+
 
     private WebDriver driver;
     private WebDriverWait wait;

@@ -13,7 +13,7 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
 /**
  * Created by Tester on 2/26/2017.
  */
-public class Task1 {
+public class Task1 extends TaskBase{
 
 
     private WebDriver driver;

@@ -16,6 +16,8 @@ public class AdminPage extends BasePage {
     protected String MENU_ITEM_STRING = "li#app-:nth-child(%s)";
     protected By subMenyItemLocator = By.cssSelector("[id^=doc-]");
     protected String SUB_MENU_ITEM_STRING = "[id^=doc-]:nth-child(%s)";
+    protected String COUNTRIES_LOCATOR_STRING = "a[href='http://localhost:8081/litecart/admin/?app=countries&doc=countries']";
+    protected String ZONES_LOCATOR_STRING = "a[href='http://localhost:8081/litecart/admin/?app=geo_zones&doc=geo_zones']";
 
     public WebDriver CheckElemenetsInMenu(WebDriver driver) {
         List<WebElement> menuList = driver.findElements(menuItemLocator);
@@ -36,5 +38,14 @@ public class AdminPage extends BasePage {
     return driver;
     }
 
+    public WebElement getCountries (WebDriver driver) {
+        return driver.findElement(By.cssSelector(COUNTRIES_LOCATOR_STRING));
+
+    }
+
+    public WebElement getZones (WebDriver driver) {
+        return driver.findElement(By.cssSelector(ZONES_LOCATOR_STRING));
+
+    }
 
 }

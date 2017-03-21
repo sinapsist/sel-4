@@ -15,4 +15,6 @@ public class LoginPage extends BasePage {
         driver.findElement(By.name("login")).click();
         return driver;
     }
+
+
 }

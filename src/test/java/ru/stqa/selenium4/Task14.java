@@ -29,7 +29,7 @@ public class Task14 extends TaskBase {
     }
 
     @Test
-    public void newProductCreation() {
+    public void checkAddNewCountryLinksNewWindows() {
         log.debug("Go to Login Page");
         LoginPage loginPage = new LoginPage();
         loginPage.Login(driver);

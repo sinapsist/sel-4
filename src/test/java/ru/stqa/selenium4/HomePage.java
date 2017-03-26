@@ -2,11 +2,15 @@ package ru.stqa.selenium4;
 
 import org.junit.Assert;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import ru.stqa.selenium4.Data.User;
 
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -14,6 +18,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class HomePage extends BasePage {
 
+    // Product locators
     protected By productItemLocator = By.cssSelector("a.link[title*=Duck]");
     protected By stickerLocator = By.cssSelector("[class^=sticker]");
     protected By campaignsLocator = By.cssSelector("div#box-campaigns");
@@ -21,6 +26,27 @@ public class HomePage extends BasePage {
     protected By productNameLocator = By.cssSelector("div.name");
     protected By productPriceLocator = By.cssSelector("s.regular-price");
     protected By salesProductPriceLocator = By.cssSelector("strong.campaign-price");
+
+
+    // User locators
+    protected By createNewUserLocator = By.cssSelector("div#box-account-login a");
+    protected By firstNameLocator = By.cssSelector("[name=firstname]");
+    protected By lastNameLocator = By.cssSelector("[name=lastname]");
+    protected By addressLocator = By.cssSelector("[name=address1]");
+    protected By postalCodeLocator = By.cssSelector("[name=postcode]");
+    protected By cityLocator = By.cssSelector("[name=city]");
+    protected By phoneLocator = By.cssSelector("[name=phone]");
+    protected By emailLocator = By.cssSelector("[name=email]");
+    protected By passwordLocator = By.cssSelector("[name=password]");
+    protected By confirmedPasswordLocator = By.cssSelector("[name=confirmed_password]");
+    protected By createAccountButtonLocator = By.cssSelector("[name=create_account]");
+    protected By loginButtonLocator = By.cssSelector("[name=login]");
+    protected By logoutButtonLocator = By.cssSelector("div.content [href$=logout]");
+    protected By countryListLocator = By.cssSelector("select.select2-hidden-accessible");
+    protected By countryZoneLocator = By.cssSelector("select[name=zone_code]");
+
+    //Cart items
+    protected By cartItemLocator = By.cssSelector("#box-most-popular li");
 
     public WebDriver isStickerPresent (WebDriver driver){
         driver.navigate().to("http://localhost:8081/litecart/en/");
@@ -89,6 +115,75 @@ public class HomePage extends BasePage {
         Assert.assertTrue("Size of sale price is not bigger than regular price", fontSizeProduct < fontSizeSales);
 
     }
+
+    public User setUpNewUserInfo(){
+        String userFirstName = "Tester";
+        String userLastName = "Tester";
+        String userAddress = "90210 Beverly Hills";
+        String userPostalCost = "90210";
+        String userCity = "California";
+        String userPassword = "Tester";
+        String userPhoneNumber = "+1-800-88443";
+        String userEmailAddress = String.format("tester%s@gmail.com", getRandomNumber());
+
+        User user =  new User(
+                userFirstName,
+                userLastName,
+                userEmailAddress,
+                userAddress,
+                userPostalCost,
+                userCity,
+                userPassword,
+                userPhoneNumber);
+        return user;
+    }
+
+    private int getRandomNumber(){
+        Random rand = new Random();
+        return rand.nextInt(1000) + 1;
+    }
+
+    public void createNewUserAndLogin(WebDriver driver, User user){
+        driver.findElement(createNewUserLocator).click();
+        driver.findElement(firstNameLocator).sendKeys(user.getFirstName());
+        driver.findElement(lastNameLocator).sendKeys(user.getLastName());
+        driver.findElement(addressLocator).sendKeys(user.getAddress());
+        driver.findElement(postalCodeLocator).sendKeys(user.getPostalCode());
+        driver.findElement(cityLocator).sendKeys(user.getCity());
+
+        Select countryList = new Select(driver.findElement(countryListLocator));
+        countryList.selectByIndex(224);
+
+        Select stateList = new Select(driver.findElement(countryZoneLocator));
+        stateList.selectByIndex(11);
+
+        driver.findElement(phoneLocator).sendKeys(user.getPhoneNumber());
+        driver.findElement(emailLocator).sendKeys(user.getEmail());
+        driver.findElement(passwordLocator).sendKeys(user.getPassword());
+        driver.findElement(confirmedPasswordLocator).sendKeys(user.getPassword());
+
+        driver.findElement(createAccountButtonLocator).click();
+
+        driver.findElement(logoutButtonLocator).click();
+
+        driver.findElement(emailLocator).sendKeys(user.getEmail());
+        driver.findElement(passwordLocator).sendKeys(user.getPassword());
+        driver.findElement(loginButtonLocator).click();
+
+        driver.findElement(logoutButtonLocator).click();
+    }
+
+
+    public void getItemPage(WebDriver driver){
+        driver.findElements(cartItemLocator).get(0).click();
+    }
+
+
+
+
+
+
+
 
 
 }

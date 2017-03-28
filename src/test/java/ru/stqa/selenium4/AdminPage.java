@@ -4,6 +4,8 @@ import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.logging.LogEntries;
+import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -17,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
 /**
  * Created by Tester on 3/11/2017.
@@ -60,6 +63,10 @@ public class AdminPage extends BasePage {
     // Add country locators
     protected By addCountryButtonLocator = By.cssSelector("a.button");
     protected By AddCountryLinksLocator = By.cssSelector(".fa-external-link");
+
+    // Catalog items
+    protected By rubberDuckLocator = By.cssSelector("td:nth-child(3) > a");
+    protected By duckCatalogItemsLocatator = By.cssSelector("tr.row [href*=edit]:not([title=Edit])");
 
     public void createNewProduct (WebDriver driver, Product product){
         driver.findElement(catalogLocator).click();
@@ -208,6 +215,26 @@ public class AdminPage extends BasePage {
         Set<String> handles = driver.getWindowHandles();
         handles.removeAll(oldWindows);
         return handles.isEmpty() ? null : handles.iterator().next();
+    }
+
+
+    public WebElement getCatalog (WebDriver driver) {
+        return driver.findElement(catalogLocator);
+    }
+
+
+    public void isConsoleLogs(WebDriver driver) {
+        LogEntries logs;
+        driver.findElement(rubberDuckLocator).click();
+        List<WebElement> productList = driver.findElements(duckCatalogItemsLocatator);
+
+        for (int i = 0; i < productList.size(); i++) {
+            productList = driver.findElements(duckCatalogItemsLocatator);
+            productList.get(i).click();
+            driver.navigate().back();
+            logs = driver.manage().logs().get("browser");
+            Assert.assertTrue("Something found in the log!", logs.getAll().isEmpty());
+        }
     }
 
 }
